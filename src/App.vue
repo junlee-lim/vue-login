@@ -7,6 +7,7 @@ import router from './router';
   <header>
     <router-link to="/signup">Sign Up</router-link>
     <router-link to="/signin">Sign In</router-link>
+    <router-link to="/board/write">Write</router-link>
   </header>
   <main>
     <router-view />

@@ -16,7 +16,7 @@ const viewPW = () => {
 
 const signIn = async() => {
     const result = await userService.signIn(state.signin);
-    console.log('result: ' + result);
+    console.log('result: ', result);
 
 }
 </script>
