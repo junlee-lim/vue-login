@@ -10,10 +10,15 @@ export const useAuthenticationStore = defineStore('authentication', ()=>{
         isSigned: false
     })
 
+    const signOut = () => {
+        state.isSigned = false;
+        state.signedUser = null;
+    }
+
     const signIn = signedUser => {
         state.isSigned = true;
         state.signedUser = signedUser
     }
 
-    return{state, signIn}
+    return{state, signIn, signOut}
 }, {persist: true});
