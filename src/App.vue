@@ -12,6 +12,7 @@ const doSingOut = async() => {
     alert('logout failed');
   }
 }
+
 </script>
 
 <template>
