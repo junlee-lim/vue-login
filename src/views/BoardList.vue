@@ -10,9 +10,8 @@ const state = reactive({
     maxPage: 0
 })
 
-onMounted(async() => {
-    getBoardMaxPage();
-    getBoardNowPage();
+onMounted(() => {
+    doSearch();
 })
 
 const getBoardMaxPage = async() => {
