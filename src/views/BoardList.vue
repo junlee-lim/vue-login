@@ -1,6 +1,9 @@
 <script setup>
 import boardService from '@/services/boardService';
 import { reactive, onMounted, computed } from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const state = reactive({
     list: [],
@@ -72,6 +75,9 @@ const lastPage = () => {
 const firstPage = () => {
     goToPage(1);
 }
+const moveToDetail = id => {
+    router.push(`/board/${id}`);
+}
 </script>
 
 <template>
@@ -90,7 +96,7 @@ const firstPage = () => {
             </tr>
         </thead>
         <tbody>
-            <tr v-for="itme in state.list" :key="itme.id">
+            <tr v-for="itme in state.list" :key="itme.id" @click="moveToDetail(itme.id)">
                 <td>{{ itme.id }}</td>
                 <td>{{ itme.title }}</td>
                 <td>{{ itme.nm }}</td>

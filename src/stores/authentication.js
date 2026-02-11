@@ -4,7 +4,7 @@ import { reactive } from "vue";
 export const useAuthenticationStore = defineStore('authentication', ()=>{
     const state = reactive({
         signedUser:{
-            signedUserid:0,
+            signedUserId:0,
             nm:''
         },
         isSigned: false

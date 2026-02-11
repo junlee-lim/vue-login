@@ -2,7 +2,9 @@
 import userService from '@/services/userService';
 import { useAuthenticationStore } from '@/stores/authentication';
 import { reactive } from 'vue';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const authentication = useAuthenticationStore();
 
 const state = reactive({
@@ -21,7 +23,7 @@ const signIn = async() => {
     const result = await userService.signIn(state.signin);
     console.log('result: ', result);
     authentication.signIn(result.resultData);
-
+    router.push('/');
 }
 </script>
 

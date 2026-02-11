@@ -17,6 +17,18 @@ class BoardService{
         const res = await axios.get(`${this.#url}/max_page`, {params})
         return res.data;
     }
+    async getBoardById(id){
+        const res = await axios.get(`${this.#url}/${id}`)
+        return res.data;
+    }
+    async boardDel(params){
+        const res = await axios.delete(this.#url, {params})
+        return res.data;
+    }
+    async boardMod(params){
+        const res = await axios.put(this.#url, params)
+        return res.data;
+    }
 }
 
 export default new BoardService();
