@@ -22,6 +22,12 @@ const viewPW = () => {
 const signIn = async() => {
     const result = await userService.signIn(state.signin);
     console.log('result: ', result);
+
+    if(result.resultData === null){
+        alert(result.resultMessage);
+        return;
+    }
+
     authentication.signIn(result.resultData);
     router.push('/');
 }
