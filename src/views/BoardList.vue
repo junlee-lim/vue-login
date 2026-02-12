@@ -10,7 +10,8 @@ const state = reactive({
     searchText: '',
     size: 50,
     currentPage: 1,
-    maxPage: 0
+    maxPage: 0,
+    relatedSearchList: []
 })
 
 onMounted(() => {
@@ -28,10 +29,6 @@ const getBoardMaxPage = async() => {
     state.maxPage = result.resultData;
 }
 
-const goToPage = async(page) => {
-    state.currentPage = page;
-    getBoardNowPage();
-}
 const getBoardNowPage = async() => {
     const params = {
         page: state.currentPage,
@@ -47,6 +44,17 @@ const getBoardNowPage = async() => {
 const doSearch = () => {
     state.currentPage = 1;
     getBoardMaxPage();
+    getBoardNowPage();
+    state.relatedSearchList = [];
+}
+
+const doClickSearch = (idx) => {
+    state.searchText = state.relatedSearchList[idx];
+    doSearch();
+}
+
+const goToPage = async(page) => {
+    state.currentPage = page;
     getBoardNowPage();
 }
 
@@ -78,11 +86,39 @@ const firstPage = () => {
 const moveToDetail = id => {
     router.push(`/board/${id}`);
 }
+
+let timer;
+
+const typing = e => {
+    if(timer){clearTimeout(timer);}
+    timer = setTimeout(()=> {
+        getRelatedTitles();
+    }, 100);
+}
+
+const getRelatedTitles = async() => {
+    if(state.searchText.length === 0){
+        state.relatedSearchList = [];
+        return;
+    }
+    const params = {
+        search_text: state.searchText
+    }
+    const result = await boardService.getBoardRelatedTitles(params);
+    state.relatedSearchList = result.resultData;
+}
 </script>
 
 <template>
     <h3>list</h3>
-    <div><input type="search" v-model="state.searchText" @keyup.enter="doSearch">
+    <div class="search-container">
+        <input type="search" v-model="state.searchText" @keyup="typing"
+         @keyup.enter="doSearch" autocomplete="on">
+         <div class="related-search" v-if="state.relatedSearchList.length > 0">
+            <div v-for="item, idx in state.relatedSearchList" class="related-search1" @click="doClickSearch(idx)">
+                {{ item }}
+            </div>
+        </div>
         <button @click="doSearch">search</button>
     </div>
     <p v-if="state.list.length === 0">nothing..</p>
@@ -109,7 +145,7 @@ const moveToDetail = id => {
         <button @click="firstPage" v-show="currentGroup != 1">&lt;&lt;</button>
         <button @click="previousPage" v-show="currentGroup != 1">&lt;</button>
         <span class="page" :class="{selected: item == state.currentPage}" 
-                v-for="item in displayedPages" :key="item" @click="goToPage(item)">
+            v-for="item in displayedPages" :key="item" @click="goToPage(item)">
             {{ item }}
         </span>
         <button @click="nextPage" v-show="endPage < state.maxPage">&gt;</button>
@@ -124,4 +160,8 @@ tbody tr:hover{cursor: pointer; background-color: azure;}
 .page{cursor: pointer;}
 .page:not(:first-child){margin-left: 8px;}
 .selected{color: red; font-weight: bold;}
+
+.search-container{position: relative;}
+.related-search{position: absolute; left: 0; top: 20px; background-color: white; z-index: 5; border: 1px solid #a3a3a3;}
+.related-search1:hover{cursor: pointer; background-color: aliceblue;}
 </style>
